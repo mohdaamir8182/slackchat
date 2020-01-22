@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "520850270775",
+    "firebase_url": "https://slackchat-887b0.firebaseio.com",
+    "project_id": "slackchat-887b0",
+    "storage_bucket": "slackchat-887b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:520850270775:android:a0e7079c113247ee446db2",
+        "android_client_info": {
+          "package_name": "com.slackchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "520850270775-cnn66a02kign3m6iokp1imdcr753fodg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSLhDE6JLqUFA0L7jb5TpKN8z5L_TtsOw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "520850270775-cnn66a02kign3m6iokp1imdcr753fodg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
