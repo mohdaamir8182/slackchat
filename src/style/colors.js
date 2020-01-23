@@ -3,6 +3,9 @@
 const colors = {
     appBackground: "#9C84FF",
     accentColor: "#75D8BD",
+    bottomTabIconColor:"#92B5B2",
+    orange: "#E9A823",
+    black: "#000000",
     grey: "#9C9C9C",
     fbIconbg: "#6E9EFC",
     fbIconText: "#84ADFF",

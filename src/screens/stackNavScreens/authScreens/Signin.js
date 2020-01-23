@@ -59,7 +59,8 @@ class Signin extends Component {
                 <Icon 
                   name="email"
                   size={20}
-                  style={{alignSelf: 'center', padding: 10, backgroundColor: colors.grey,borderTopLeftRadius: 50,borderBottomLeftRadius:50}}
+                  color="white"
+                  style={{alignSelf: 'center', padding: 10, backgroundColor: colors.accentColor,borderTopLeftRadius: 50,borderBottomLeftRadius:50}}
                 />
                 <TextInput 
                     placeholder="Email"
@@ -72,7 +73,8 @@ class Signin extends Component {
                 <Icon 
                   name="key"
                   size={20}
-                  style={{alignSelf: 'center', padding: 10, backgroundColor: colors.grey,borderTopLeftRadius: 50,borderBottomLeftRadius:50}}
+                  color="white"
+                  style={{alignSelf: 'center', padding: 10, backgroundColor: colors.accentColor,borderTopLeftRadius: 50,borderBottomLeftRadius:50}}
                 />
                 <TextInput 
                     placeholder="Password"
@@ -165,7 +167,7 @@ const styles = StyleSheet.create({
        margin: 10,
        borderWidth: 1,
        borderRadius: 50,
-       borderColor: colors.grey,
+       borderColor: colors.accentColor,
        flexDirection: 'row',
        alignItems: 'center'
    } ,
