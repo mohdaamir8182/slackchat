@@ -1,2 +1,2 @@
 # slackchat
-A react native chat app using firebase as backend.
+A react native chat app using firestore as backend.
