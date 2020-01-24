@@ -22,7 +22,7 @@ export default class User extends Component {
                 </View>
 
                 <View style={styles.titleContainer}>
-                    <Text style={styles.titleStyle}>Slack Chat</Text>
+                    <Text style={styles.titleStyle}>{this.props.name}</Text>
                     <Text
                         numberOfLines={1} 
                         style={{fontSize: 14,color:colors.grey}}>
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         elevation: 0.7,
-    
+        marginBottom: 5,
     },
     imgContainer:{
         flex: 2,
@@ -65,7 +65,8 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         justifyContent: 'center',
         borderRightColor: colors.grey,
-        borderRightWidth: 1
+        borderRightWidth: 1,
+        marginLeft: 5
     },
     timeContainer:{
         flex: 2,

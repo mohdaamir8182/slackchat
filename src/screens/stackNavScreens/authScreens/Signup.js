@@ -40,7 +40,10 @@ export default class Signup extends Component {
           username: this.state.username,
           full_name: this.state.full_name,
           email: this.state.email,
-          password: this.state.password
+          password: this.state.password,
+          friends:[],
+          sent_requests:[],
+          recieved_requests:[],
         })
         .then(function() {
           console.log("Document successfully written!");

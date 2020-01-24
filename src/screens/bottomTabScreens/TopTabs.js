@@ -3,8 +3,8 @@ import { View, Text, Button, StyleSheet, Image, StatusBar } from 'react-native';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import auth from '@react-native-firebase/auth';
-import Messages from '../bottomTabScreens/Messages';
-import People from '../bottomTabScreens/People';
+import Friends from '../bottomTabScreens/Friends';
+import Requests from '../bottomTabScreens/Requests';
 import colors from '../../style/colors';
 
 const TopTabsNavigator = createMaterialTopTabNavigator(
@@ -12,17 +12,17 @@ const TopTabsNavigator = createMaterialTopTabNavigator(
     
     chats : 
     {
-        screen: Messages,
+        screen: Friends,
         navigationOptions:{
-            tabBarLabel: 'Messages',
+            tabBarLabel: 'Friends',
             style:{fontStyle: 'bold',}
         }
     },
-    people : 
+    requests : 
     {
-        screen: People,
+        screen: Requests,
         navigationOptions:{
-            tabBarLabel: 'People'
+            tabBarLabel: 'Requests'
         }
     }
     
