@@ -1,4 +1,5 @@
-import { createStore, combineReducers } from "redux";
+import { createStore,applyMiddleware, combineReducers } from "redux";
+import thunk from 'redux-thunk';
 import auth_reducer from "../reducers/auth_reducer";
 import search_reducer from '../reducers/search_reducer';
 
@@ -8,7 +9,7 @@ const rootReducer = combineReducers({
 });
 
 const configureStore = () => {
-  return createStore(rootReducer);
+  return createStore(rootReducer , applyMiddleware(thunk));
 };
 
 export default configureStore;

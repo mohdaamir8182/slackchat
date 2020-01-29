@@ -64,6 +64,7 @@ class Signin extends Component {
                 />
                 <TextInput 
                     placeholder="Email"
+                    autoCapitalize="none"
                     style={{flex: 1,}}
                     onChangeText={(val)=>this.setState({email: val})}
                 />
@@ -78,6 +79,7 @@ class Signin extends Component {
                 />
                 <TextInput 
                     placeholder="Password"
+                    autoCapitalize="none"
                     style={{flex: 1,}}
                     onChangeText={(val)=>this.setState({password: val})}
                 />

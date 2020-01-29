@@ -36,7 +36,9 @@ const TopTabsNavigator = createMaterialTopTabNavigator(
             marginTop: 13,
             marginBottom: 10,
             marginHorizontal: 10,
-            elevation: 0.8,
+            elevation: 0.9,
+            shadowColor: colors.lightGrey,
+            shadowOpacity: 0.3,
             backgroundColor: '#fff'
         },
         indicatorStyle:{backgroundColor:colors.accentColor,height: 4},

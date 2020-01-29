@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet,StatusBar, SafeAreaView, Image } from 'react-native';
+import { View, Text, StyleSheet,StatusBar, SafeAreaView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import colors from '../style/colors';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-export default class User extends Component {
+export default class SearchedUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,7 +18,7 @@ export default class User extends Component {
                 <View style={styles.imgContainer}>
                         <Image 
                             source={require('../assets/icons/5b517aeb400f9-bpfull.png')}
-                            style={{height: 50, width: 50}}
+                            style={{height: 45, width: 45}}
                         />
                 </View>
 
@@ -26,14 +27,27 @@ export default class User extends Component {
                     <Text
                         numberOfLines={1} 
                         style={{fontSize: 14,color:colors.grey}}>
-                            But I must explain to you how all this But I must explain to you how all this
+                        {this.props.email}
                     </Text>
                 </View>
-
-                <View style={styles.timeContainer}>
-                    <Text style={{fontSize:12, color: colors.orange}}>12 Dec</Text>
-                    <Text style={{fontSize: 12,color:colors.orange}}>11.10 PM</Text>
-                </View>
+                {
+                    this.props.friendsBtnVisibility ? 
+                    <View style={styles.btnContainer}>
+                        <Text style={{fontSize: 16,color:colors.orange}}>{this.props.btnTitle}</Text>
+                    </View> :
+                    <TouchableOpacity 
+                        style={styles.btnContainer}
+                        onPress={this.props.sendFriendRequest}
+                    >
+                        {
+                            this.props.isLoading ? 
+                              <ActivityIndicator style={{color:'black'}} />
+                            : <Text style={{fontSize: 16,color:colors.orange}}>{this.props.btnTitle}</Text>
+                        }  
+                    </TouchableOpacity>
+                }
+                
+                
 
         </View>
       
@@ -44,14 +58,18 @@ export default class User extends Component {
 const styles = StyleSheet.create({
     container:{
         height: 60,
-        //flex: 1,
+        flex: 1,
         //backgroundColor: colors.accentColor,
-        paddingTop: StatusBar.currentHeight ,
+        //paddingTop: StatusBar.currentHeight ,
         justifyContent: 'center',
         flexDirection: 'row',
         alignItems: 'center',
         elevation: 0.7,
         marginBottom: 5,
+        justifyContent: 'center',
+        borderWidth: 2,
+        borderRadius: 5,
+        borderColor: colors.accentColor
     },
     imgContainer:{
         flex: 2,
@@ -60,7 +78,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     titleContainer:{
-        flex: 8,
+        flex: 7,
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'center',
@@ -68,13 +86,13 @@ const styles = StyleSheet.create({
         borderRightWidth: 1,
         marginLeft: 5
     },
-    timeContainer:{
-        flex: 2,
+    btnContainer:{
+        flex: 3,
         //backgroundColor: 'blue',
         alignItems: 'center',
         justifyContent: 'center',
-        marginLeft: 10
-        //marginHorizontal: 10
+        //marginLeft: 10
+        alignItems: 'center'
     },
     titleStyle:{
         fontSize: 17,

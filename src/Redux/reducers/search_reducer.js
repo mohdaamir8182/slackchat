@@ -1,15 +1,25 @@
-import { SEARCH } from "../types/search_types";
-import Signin from "../../screens/stackNavScreens/authScreens/Signin";
+import { SEARCH, CHANGE_SEARCH_ICON } from "../types/search_types";
 
 const initialState = {
-  search_query: "friendss"
+  isSearching: false,
+  users: [],
 };
+
+
+
 const search_reducer = (state = initialState, action) => {
   switch (action.type) {
     case SEARCH:
       return {
         ...state,
-        search_query: action.payload
+        isSearching: true,
+        users: action.payload
+      };
+      case CHANGE_SEARCH_ICON:
+      return {
+        ...state,
+        isSearching: !state.isSearching,
+        users: []
       };
     
     default:

@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet,StatusBar, SafeAreaView, Image,TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet,StatusBar, SafeAreaView, Image,TextInput, TouchableOpacity, ColorPropType } from 'react-native';
 import colors from '../style/colors';
 import SearchIcon from 'react-native-vector-icons/EvilIcons';
 import CrossIcon from 'react-native-vector-icons/Entypo';
 import {connect} from 'react-redux';
-import {do_search} from '../Redux/actions/search_actions';
+import {change_search_icon,search_users} from '../Redux/actions/search_actions';
 import Search from './Search';
 
 class Header extends Component {
   constructor(props) {
+      console.log("Props.....:",props)
     super(props);
     this.state = {
         iconName:"search",
@@ -17,14 +18,18 @@ class Header extends Component {
     };
   }
 
-  onSearchClick = () => {
-      
-      this.setState({isSearching:!this.state.isSearching,});
+  
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return {
+        isSearching: nextProps.isSearching
+    };
   }
 
-  search = () => {
-      console.log("QUERY...:",this.state.search_query)
-    this.props.dispatchSearch(this.state.search_query)
+  onIconClick = () => {
+      console.log("ICON_CLICKED....:");
+      this.setState({isSearching:!this.state.isSearching});
+      this.props.dispatchIconChange();
   }
 
   render() {
@@ -37,9 +42,10 @@ class Header extends Component {
                         <View style={styles.sectionContainer}>
                             <TextInput 
                                 placeholder="search"
+                                autoCapitalize="none"
                                 style={styles.searchBarStyle}
-                                onChangeText={(val)=>this.setState({search_query:val})}
-                                onEndEditing={this.search}
+                                onChangeText={(val) => this.props.dispatchUserSearch(val)}
+                                //onEndEditing={this.search}
                             />
                         </View>
 
@@ -60,18 +66,18 @@ class Header extends Component {
                 }
 
                 <View style={styles.avatarContainer}>
-                    <TouchableOpacity onPress={this.onSearchClick}>
+                    <TouchableOpacity onPress={()=>this.onIconClick()}>
                         {
                             !this.state.isSearching ? 
                                 <SearchIcon 
                                     name="search"
                                     size={30}
-                                    color="black"
+                                    color={colors.lightGrey}
                                 />
                             :   <CrossIcon 
                                     name="cross"
                                     size={30}
-                                    color="black"
+                                    color={colors.lightGrey}
                                 />
                         }
                     </TouchableOpacity>    
@@ -88,17 +94,23 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log("SEARCH_STATE...:",state.search_reducer.search_query);
+    //console.log("SEARCHING..:",state.search_reducer.isSearching);
+
     return{
+        isSearching: state.search_reducer.isSearching,
         search_query : state.search_reducer.search_query
     }
+
     
 }
 
 const mapDispatchToProps = dispatchEvent => {
     return {
-        dispatchSearch: (search_query) => {
-            dispatchEvent(do_search(search_query));
+        dispatchUserSearch: (search_query) => {
+            dispatchEvent(search_users(search_query));
+        },
+        dispatchIconChange: () => {
+            dispatchEvent(change_search_icon());
         }
     }
 }
@@ -106,15 +118,11 @@ const mapDispatchToProps = dispatchEvent => {
 const styles = StyleSheet.create({
     container:{
         height: 80,
-        //flex: 1,
-        //backgroundColor: colors.accentColor,
         paddingTop: StatusBar.currentHeight ,
-        //justifyContent: 'center',
         flexDirection: 'row',
-        //alignItems: 'center',
-        elevation: 0.7,
-        borderBottomWidth: 1,
-        borderColor: colors.grey
+        elevation: 0.3,
+        borderBottomWidth: 0.2,
+        borderColor: colors.lightGrey
     },
     sectionContainer:{
         flex: 7,

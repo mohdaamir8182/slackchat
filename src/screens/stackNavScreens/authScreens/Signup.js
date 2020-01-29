@@ -84,6 +84,7 @@ export default class Signup extends Component {
                 />
                 <TextInput 
                     placeholder="Username"
+                    autoCapitalize="none"
                     style={{flex: 1,}}
                     onChangeText={(val)=>this.setState({username: val})}
                 />
@@ -98,6 +99,7 @@ export default class Signup extends Component {
                 />
                 <TextInput 
                     placeholder="Full Name"
+                    autoCapitalize="none"
                     style={{flex: 1,}}
                     onChangeText={(val)=>this.setState({full_name: val})}
                 />
@@ -112,6 +114,7 @@ export default class Signup extends Component {
                 />
                 <TextInput 
                     placeholder="Email"
+                    autoCapitalize="none"
                     style={{flex: 1,}}
                     onChangeText={(val)=>this.setState({email: val})}
                 />
@@ -126,6 +129,7 @@ export default class Signup extends Component {
                 />
                 <TextInput 
                     placeholder="Password"
+                    autoCapitalize="none"
                     style={{flex: 1,}}
                     onChangeText={(val)=>this.setState({password: val})}
                 />
@@ -140,6 +144,7 @@ export default class Signup extends Component {
                 />
                 <TextInput 
                     placeholder="Confirm Password"
+                    autoCapitalize="none"
                     style={{flex: 1,}}
                     onChangeText={(val)=>this.setState({confirm_password: val})}
                 />

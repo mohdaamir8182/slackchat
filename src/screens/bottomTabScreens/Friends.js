@@ -14,17 +14,27 @@ export default class Friends extends Component {
     };
   }
 
+ getFriends = () => {
+
+    var db = firestore();
+    var that = this;
+    
+         db.collection("users").doc(auth().currentUser.uid)
+              .onSnapshot(function(doc) {
+                 const data = doc.data().friends ? doc.data().friends : [];
+                 console.log("LENGTH....:",data)
+                 data.length > 0 && db.collection("users").where("id" , "in" , data)
+                        .get()
+                        .then(doc => {
+                          that.setState({friends:doc._docs});
+                            //console.log("FRIENDS....",that.state.friends)
+                        })
+                        .catch(err => console.log(err));
+                 });
+  }
+
   async componentDidMount(){
-      var db = firestore();
-      var data = [];
-      var that = this;
-     await db.collection("users").get().then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-            data.push(doc.data());
-        });
-        console.log("DATA....:",data);
-        that.setState({friends:data});s
-    });
+     await this.getFriends();
   }
 
   render() {
@@ -34,10 +44,10 @@ export default class Friends extends Component {
             data={this.state.friends}
             keyExtractor={(item) => item.id}
             renderItem = {({item}) => {
-              console.log("Username..: ",item.username);
+              const user = item._data;
               return(
                   <User
-                    name={item.full_name}
+                    name={user.full_name}
                   />
               );
             }}
