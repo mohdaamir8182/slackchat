@@ -36,7 +36,8 @@ class Chat extends React.Component {
     var that = this;
     
          db.collection("users").doc(auth().currentUser.uid)
-              .onSnapshot(function(doc) {
+              .onSnapshot
+              (function(doc) {
                  const data = doc.data().friends ? doc.data().friends : [];
                  console.log("FRIENDS...:",data);
                 data.length > 0 && db.collection("users").where("id" , "in" , data)
@@ -107,6 +108,10 @@ class Chat extends React.Component {
   async componentDidMount(){
      await this.getFriends();
      await this.getSentRequests();
+  }
+
+  componentWillUnmount(){
+    this.setState({users:[]});
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {

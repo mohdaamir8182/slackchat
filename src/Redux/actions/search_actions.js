@@ -1,4 +1,4 @@
-import { SEARCH } from "../types/search_types";
+import { SEARCH,RESET_SEARCH } from "../types/search_types";
 import { CHANGE_SEARCH_ICON } from "../types/search_types";
 import firestore from '@react-native-firebase/firestore';
 
@@ -43,5 +43,12 @@ export const search_users =  (search_query) => {
 export const change_search_icon = () => {
   return {
     type: CHANGE_SEARCH_ICON,
+  };
+};
+
+export const reset_search = () => {
+  return {
+    type: RESET_SEARCH,
+    payload: false
   };
 };

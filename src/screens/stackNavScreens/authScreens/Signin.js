@@ -27,10 +27,7 @@ class Signin extends Component {
       then(user => {
         this.setState({isLoading: false})
         this.props.dispatchSignin(user);
-      }).
-      then(()=>{
-        this.props.navigation.navigate('home');
-      })
+      });
   }
 
   render() {

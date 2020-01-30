@@ -41,6 +41,7 @@ export default class Signup extends Component {
           full_name: this.state.full_name,
           email: this.state.email,
           password: this.state.password,
+          isLoading: false,
           friends:[],
           sent_requests:[],
           recieved_requests:[],

@@ -12,10 +12,9 @@ const colors = {
     white: "#FFFFFF",
     googleIcon: "#FC6D6D",
     googleIconText: "#FF8484",
-    inviteBoxbg: "#FF9861",
-    quickPlaybg:"#FF7777",
-    friendsBoxbg:"#FF84CA",
     parrot: "#84FFB5",
+    green: "green",
+    tomato: "tomato",
     
     appYellow: "#FFB900",
     basicTextGrey: "#95989A",

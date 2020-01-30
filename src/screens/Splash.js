@@ -2,27 +2,41 @@ import React, { Component } from 'react';
 import { View, Text, StatusBar, StyleSheet, SafeAreaView, Image } from 'react-native';
 import colors from "../style/colors";
 import auth from '@react-native-firebase/auth';
+import { NavigationActions, StackActions } from "react-navigation";
 
 
 const Splash = (props) => {
   
     auth().onAuthStateChanged(function(user) {
-            if (user) {
-            
-            setTimeout(()=>{
-                    console.log("INNNN")
-                    props.navigation.navigate('home');
-            },2000)
-            //console.log("Logedin user",user);
-            
-            } else {
-            setTimeout(()=>{
-                    console.log("OUTTTT");
-                    props.navigation.navigate('signin');
-            },2000)
-            
-            }
+        if (user) {
+          
+          setTimeout(()=>{
+       
+        const resetAction = StackActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({ routeName: "home" })
+          ]
+        });
+        props.navigation.dispatch(resetAction);
+        },3000)
+          console.log("Logedin user",user);
+         
+        } else {
+          setTimeout(()=>{
+       
+        const resetAction = StackActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({ routeName: "signin" })
+          ]
+        });
+        props.navigation.dispatch(resetAction);
+        },3000)
+          
+        }
       });
+    
 
     return (
       <>

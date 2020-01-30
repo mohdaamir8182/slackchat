@@ -1,4 +1,4 @@
-import { SIGN_UP, SIGN_IN } from "../types/auth_types";
+import { SIGN_UP, SIGN_IN, SIGN_OUT } from "../types/auth_types";
 import Signin from "../../screens/stackNavScreens/authScreens/Signin";
 
 const initialState = {
@@ -12,6 +12,11 @@ const auth_reducer = (state = initialState, action) => {
         user: action.payload
       };
     case SIGN_IN:
+      return {
+        ...state,
+        user: action.payload
+      };
+      case SIGN_OUT:
       return {
         ...state,
         user: action.payload

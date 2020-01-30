@@ -1,4 +1,4 @@
-import { SEARCH, CHANGE_SEARCH_ICON } from "../types/search_types";
+import { SEARCH, CHANGE_SEARCH_ICON, RESET_SEARCH } from "../types/search_types";
 
 const initialState = {
   isSearching: false,
@@ -21,6 +21,12 @@ const search_reducer = (state = initialState, action) => {
         isSearching: !state.isSearching,
         users: []
       };
+      case RESET_SEARCH:
+        return {
+          ...state,
+          isSearching: false,
+          users: []
+        };
     
     default:
       return state;
