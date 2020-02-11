@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class SearchedUser extends Component {
   constructor(props) {
+      console.log("PROPS....:",props)
     super(props);
     this.state = {
     };
@@ -32,19 +33,30 @@ export default class SearchedUser extends Component {
                 </View>
                 {
                     this.props.friendsBtnVisibility ? 
-                    <View style={styles.btnContainer}>
-                        <Text style={{fontSize: 16,color:colors.orange}}>{this.props.btnTitle}</Text>
-                    </View> :
-                    <TouchableOpacity 
-                        style={styles.btnContainer}
-                        onPress={this.props.sendFriendRequest}
-                    >
-                        {
-                            this.props.isLoading ? 
-                              <ActivityIndicator style={{color:'black'}} />
-                            : <Text style={{fontSize: 16,color:colors.orange}}>{this.props.btnTitle}</Text>
-                        }  
-                    </TouchableOpacity>
+                        <View style={styles.btnContainer}>
+                            <Text style={{fontSize: 16,color:colors.orange}}>{this.props.btnTitle}</Text>
+                        </View> :
+                    this.props.acceptBtnVisibility ?
+                        <TouchableOpacity 
+                            style={styles.btnContainer}
+                            onPress={this.props.onAcceptEvent}
+                        >
+                            {
+                                this.props.isLoading ? 
+                                <ActivityIndicator style={{color:'black'}} />
+                                : <Text style={{fontSize: 16,color:colors.orange}}>{this.props.btnTitle}</Text>
+                            }  
+                        </TouchableOpacity>:
+                        <TouchableOpacity 
+                            style={styles.btnContainer}
+                            onPress={this.props.sendFriendRequest}
+                        >
+                            {
+                                this.props.isLoading ? 
+                                <ActivityIndicator style={{color:'black'}} />
+                                : <Text style={{fontSize: 16,color:colors.orange}}>{this.props.btnTitle}</Text>
+                            }  
+                        </TouchableOpacity>
                 }
                 
                 

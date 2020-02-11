@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import auth from '@react-native-firebase/auth';
 import Chat from '../../screens/bottomTabScreens/Chat';
+import PrivateChat from '../../screens/bottomTabScreens/PrivateChat';
 import Groups from '../../screens/bottomTabScreens/Groups';
 import Calls from '../../screens/bottomTabScreens/Calls';
 import Settings from '../../screens/bottomTabScreens/Settings';

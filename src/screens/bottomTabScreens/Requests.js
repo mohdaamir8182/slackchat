@@ -3,9 +3,11 @@ import { View, Text, StyleSheet, FlatList } from 'react-native';
 import RequestTab from '../../components/RequestTab';
 import {connect} from 'react-redux';
 import {get_friend_requests} from '../../Redux/actions/request_actions';
+import {accept_friend_request} from '../../Redux/actions/request_actions';
+import {reject_friend_request} from '../../Redux/actions/request_actions';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-
+import functions from '@react-native-firebase/functions';
 
 class Requests extends Component {
   constructor(props) {
@@ -14,24 +16,6 @@ class Requests extends Component {
       requests: [],
       is:false
     };
-  }
-
-  getRequests = () => {
-
-    var db = firestore();
-    var that = this;
-    
-         db.collection("users").doc(auth().currentUser.uid)
-              .onSnapshot(function(doc) {
-                 const data = doc.data().recieved_requests ? doc.data().recieved_requests : [];
-                 console.log("REQUESTsss....:",data)
-                 data.length > 0 && db.collection("users").where("id" , "in" , data)
-                        .get()
-                        .then(doc => {
-                          that.setState({requests:doc._docs});
-                        })
-                        .catch(err => console.log(err));
-                 });
   }
 
   acceptRequest = (user_id) => {
@@ -64,14 +48,38 @@ class Requests extends Component {
   }
 
   async componentDidMount(){
-      //await this.getRequests();
-      this.props.dispatchGetRequests();
+
+      await this.props.dispatchGetRequests();
+
+      var senNotification = functions().httpsCallable('senNotification');
+      senNotification().then(function(result) {
+        // Read result of the Cloud Function.
+        console.log("FUNCTION_RESPONSE...:");
+        // ...
+      });
+      
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.requests !== nextProps.requests) {
+          return {
+            requests: nextProps.requests
+          }
+    }
+    
+    return null;
+  }
+
+  
+
   render() {
+
+    //get
+    // const {requests} = this.props;
+    // console.log("REMAINING_REQUESTS...:",requests);
+
     return (
       <View>
-        {console.log(this.state.requests)}
         <FlatList 
           data={this.state.requests}
           keyExtractor={(item)=>item.id}
@@ -80,8 +88,8 @@ class Requests extends Component {
               <RequestTab
                 name={item._data.full_name}
                 email={item._data.email}
-                onReqAccepted={()=>this.acceptRequest(item.id)}
-                onReqRejected={()=>this.rejectRequest(item.id)}
+                onReqAccepted={()=>this.props.dispatchAcceptRequests(item.id)}
+                onReqRejected={()=>this.props.dispatchRejectRequests(item.id)}
                 isLoading={item._data.isLoading}
               />
             );
@@ -101,7 +109,13 @@ const mapDispatchToProps = dispatchEvent => {
   return {
       dispatchGetRequests: () => {
           dispatchEvent(get_friend_requests());
-      }
+      },
+      dispatchAcceptRequests: (user_id) => {
+        dispatchEvent(accept_friend_request(user_id));
+      },
+      dispatchRejectRequests: (user_id) => {
+        dispatchEvent(reject_friend_request(user_id));
+      } 
   }
 }
 
@@ -125,3 +139,11 @@ export default connect(
    mapStateToProps,
    mapDispatchToProps,
 )(Requests);
+
+
+// ()=>{
+//   console.log("Calling")
+//   console.log("This props:",this.props);
+//   this.props.dispatchGetRequests();
+//     this.props.dispatchAcceptRequests(item.id)
+//   }

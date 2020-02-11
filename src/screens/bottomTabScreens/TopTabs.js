@@ -7,16 +7,22 @@ import Friends from '../bottomTabScreens/Friends';
 import Requests from '../bottomTabScreens/Requests';
 import colors from '../../style/colors';
 
-const TopTabsNavigator = createMaterialTopTabNavigator(
+
+
+const TopTabsNavigator =  createMaterialTopTabNavigator(
   {
     
     chats : 
     {
         screen: Friends,
-        navigationOptions:{
-            tabBarLabel: 'Friends',
+        navigationOptions:
+        ({ navigation, screenProps }) => ({
+         navigation:navigation,
+          tabBarLabel: 'Friends',
             style:{fontStyle: 'bold',}
-        }
+        
+        })
+    
     },
     requests : 
     {

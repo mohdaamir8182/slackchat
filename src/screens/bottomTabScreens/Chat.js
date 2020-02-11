@@ -8,8 +8,9 @@ import colors from '../../style/colors';
 import {connect} from 'react-redux';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-
 import SearchedUser from '../../components/SearchedUser';
+import {accept_friend_request} from '../../Redux/actions/request_actions';
+import {reject_friend_request} from '../../Redux/actions/request_actions';
 
 class Chat extends React.Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class Chat extends React.Component {
       search_query_from_header: "",
       searchText: "",
       sentRequests: [],
+      recivedRequests: [],
       friends:[],
       users: [],
       //isLoading: false
@@ -69,6 +71,24 @@ class Chat extends React.Component {
                  });
   }
 
+  getRecievedRequests = () => {
+
+    var db = firestore();
+    var that = this;
+    
+         db.collection("users").doc(auth().currentUser.uid)
+              .onSnapshot(function(doc) {
+                 const data = doc.data().recieved_requests ? doc.data().recieved_requests : [];
+                data.length > 0 && db.collection("users").where("id" , "in" , data)
+                        .get()
+                        .then(doc => {
+                          that.setState({recivedRequests:doc._docs});
+                            console.log("RECIEVED....",doc._docs)
+                        })
+                        .catch(err => console.log(err));
+                 });
+  }
+
   isAlreadyFriend = (id) =>  {
     return this.state.friends.some(function(user) {
       return user.id === id;
@@ -77,6 +97,12 @@ class Chat extends React.Component {
 
   isAlreadySentRequest = (id) =>  {
     return this.state.sentRequests.some(function(user) {
+      return user.id === id;
+    }); 
+  }
+
+  isAlreadyRecievedRequest = (id) => {
+    return this.state.recivedRequests.some(function(user) {
       return user.id === id;
     }); 
   }
@@ -105,9 +131,24 @@ class Chat extends React.Component {
 
   }
 
+  acceptRequest = () => {
+    console.log("req accepted");
+  }
+
+  rejectRequest = () => {
+    console.log("req rejected");
+  }
+
+  navigateScreen = () => {
+    alert("HAHAHAHAHA");
+    this.props.navigation.navigate("privateChat");
+  }
+
   async componentDidMount(){
+ 
      await this.getFriends();
      await this.getSentRequests();
+     await this.getRecievedRequests();
   }
 
   componentWillUnmount(){
@@ -153,6 +194,7 @@ class Chat extends React.Component {
                             name={item._data.full_name}
                             email={item._data.email}
                             friendsBtnVisibility={true}
+                            acceptBtnVisibility={false}
                             btnTitle="Friends"
                             isLoading={item._data.isLoading}
                             
@@ -162,7 +204,19 @@ class Chat extends React.Component {
                             name={item._data.full_name}
                             email={item._data.email}
                             friendsBtnVisibility={true}
+                            acceptBtnVisibility={false}
                             btnTitle="Sent"
+                            isLoading={item._data.isLoading}
+                            
+                        /> :
+                        this.isAlreadyRecievedRequest(item._data.id) ?
+                         <SearchedUser
+                            name={item._data.full_name}
+                            email={item._data.email}
+                            friendsBtnVisibility={false}
+                            acceptBtnVisibility={true}
+                            btnTitle="Accept"
+                            onAcceptEvent={() => this.props.dispatchAcceptRequests(item._data.id)}
                             isLoading={item._data.isLoading}
                             
                         /> :
@@ -182,7 +236,10 @@ class Chat extends React.Component {
               }
             </View>
           : <View style={styles.container}>
-              <TopTabs />
+              <TopTabs 
+                navigateToFriends = {this.navigateScreen}
+                screenProps={this.props.navigation}
+              />
             </View>
         }
 
@@ -202,6 +259,22 @@ const mapStateToProps = state => {
   
 }
 
+const mapDispatchToProps = dispatchEvent => {
+  console.log("EVENTS....:",dispatchEvent);
+  return {
+      dispatchGetRequests: () => {
+          dispatchEvent(get_friend_requests());
+      },
+      dispatchAcceptRequests: (user_id) => {
+        dispatchEvent(accept_friend_request(user_id));
+      },
+      dispatchRejectRequests: (user_id) => {
+        dispatchEvent(reject_friend_request(user_id));
+      } 
+  }
+}
+
+
 const styles = StyleSheet.create({
   container:{
     flex: 1,
@@ -218,5 +291,6 @@ const styles = StyleSheet.create({
 });
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps,
 )(Chat);

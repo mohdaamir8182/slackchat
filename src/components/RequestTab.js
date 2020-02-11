@@ -30,30 +30,25 @@ export default class RequestTab extends Component {
                         {this.props.email}
                     </Text>
                 </View>
+
+               { this.props.isLoading ? 
+                                <ActivityIndicator style={{color:'black'}} />
                 
-                <View style={styles.btnContainer}>
+                : <View style={styles.btnContainer}>
                     <TouchableOpacity 
                             // style={styles.btnContainer}
                             onPress={this.props.onReqAccepted}
-                    >
-                            {
-                                this.props.isLoading ? 
-                                <ActivityIndicator style={{color:'black'}} />
-                                : <Text style={{fontSize: 16,color:colors.green}}>Accept</Text>
-                            }  
+                    >   
+                            <Text style={{fontSize: 16,color:colors.green,marginHorizontal: 5}}>Accept</Text> 
                     </TouchableOpacity>
                     <TouchableOpacity 
                             // style={styles.btnContainer}
                             onPress={this.props.onReqRejected}
                     >
-                            {
-                                this.props.isLoading ? 
-                                <ActivityIndicator style={{color:'black'}} />
-                                : <Text style={{fontSize: 16,color:colors.tomato}}>Reject</Text>
-                            }  
+                                 <Text style={{fontSize: 16,color:colors.tomato, marginRight: 5}}>Reject</Text>
                     </TouchableOpacity>
                 </View>
-                
+            }
                 
 
         </View>
@@ -101,7 +96,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         //backgroundColor: 'blue',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         //marginLeft: 10
         alignItems: 'center'
     },

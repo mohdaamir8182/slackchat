@@ -182,7 +182,6 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-reanimated')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'com.google.firebase:firebase-analytics:17.2.0'

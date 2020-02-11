@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet,FlatList } from 'react-native';
+import { View, Text, StyleSheet,FlatList, TouchableOpacity, TouchableHighlightBase } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import { set } from 'react-native-reanimated';
 import User from '../../components/User';
+import { NavigationActions, StackActions } from "react-navigation";
+import {AppNavigator} from '../../../App';
 
 
 export default class Friends extends Component {
@@ -22,7 +24,7 @@ export default class Friends extends Component {
          db.collection("users").doc(auth().currentUser.uid)
               .onSnapshot(function(doc) {
                  const data = doc.data().friends ? doc.data().friends : [];
-                 console.log("LENGTH....:",data)
+                 console.log("FRIENDS....:",data)
                  data.length > 0 && db.collection("users").where("id" , "in" , data)
                         .get()
                         .then(doc => {
@@ -33,8 +35,17 @@ export default class Friends extends Component {
                  });
   }
 
+  navigateToPrivateChat = () => {
+    this.props.screenProps.navigate("privateChat");
+  }
+
   async componentDidMount(){
-     await this.getFriends();
+
+    this.getFriends();
+
+    console.log("SCREEN_PROPS....:", this.props.screenProps)
+
+ 
   }
 
   render() {
@@ -46,9 +57,11 @@ export default class Friends extends Component {
             renderItem = {({item}) => {
               const user = item._data;
               return(
-                  <User
-                    name={user.full_name}
-                  />
+                  <TouchableOpacity onPress={this.navigateToPrivateChat}>
+                    <User
+                      name={user.full_name}
+                    />
+                  </TouchableOpacity>
               );
             }}
           />
