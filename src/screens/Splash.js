@@ -3,6 +3,7 @@ import { View, Text, StatusBar, StyleSheet, SafeAreaView, Image } from 'react-na
 import colors from "../style/colors";
 import auth from '@react-native-firebase/auth';
 import { NavigationActions, StackActions } from "react-navigation";
+import firestore from '@react-native-firebase/firestore';
 
 
 const Splash = (props) => {
@@ -11,14 +12,22 @@ const Splash = (props) => {
         if (user) {
           
           setTimeout(()=>{
+
+            var user_status = {
+                online_status : true,
+                timestamp : firestore.FieldValue.serverTimestamp()
+            };
+
+            firestore().collection("users").doc(auth().currentUser.uid)
+            .update({userStatus:user_status});
        
-        const resetAction = StackActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({ routeName: "home" })
-          ]
-        });
-        props.navigation.dispatch(resetAction);
+            const resetAction = StackActions.reset({
+              index: 0,
+              actions: [
+                NavigationActions.navigate({ routeName: "home" })
+              ]
+            });
+            props.navigation.dispatch(resetAction);
         },3000)
           console.log("Logedin user",user);
          
