@@ -15,6 +15,7 @@ const colors = {
     parrot: "#84FFB5",
     green: "green",
     tomato: "tomato",
+    blue: "#1084ff",
     
     appYellow: "#FFB900",
     basicTextGrey: "#95989A",
