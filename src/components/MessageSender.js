@@ -8,7 +8,7 @@ export default class MessageSender extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      messageText:""
+      messageText:"",
     };
   }
 
@@ -39,7 +39,9 @@ export default class MessageSender extends Component {
                   style={styles.messageInputStyle}
                   placeholder="Type message here..."
                   onChangeText={this.writeMessage} 
-                  value={this.state.messageText}   
+                  value={this.state.messageText} 
+                  // onFocus={this.props.updateTypingStatus(true)}
+                  // onEndEditing={this.props.updateTypingStatus(false)}  
               />
 
             </View>

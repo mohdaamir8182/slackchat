@@ -15,8 +15,13 @@ export default class PrivateChat extends Component {
     this.state = {
       reciever_user: props.navigation.getParam("user"),
       online: false,
-      messages:[]
+      isTyping: false,
+      messages:[],
     };
+  }
+
+  onBackPressEvent = () => {
+    this.props.navigation.navigate("home");
   }
 
   getChatUser = () => {
@@ -27,8 +32,26 @@ export default class PrivateChat extends Component {
          db.collection("users").doc(this.state.reciever_user.id)
               .onSnapshot(function(doc) {
                 console.log("CHAT_USERRRRR...:",doc.data());
-                that.setState({online: doc.data().userStatus.online_status },()=>{console.log("ONEtoONE..",that.state.chatUser)});
+                that.setState({online: doc.data().userStatus.online_status,isTyping: doc.data().userStatus.isTyping },()=>{console.log("ONEtoONE..",that.state.chatUser)});
               });
+  }
+
+  updateTypingStatus = (isTyping) => {
+        isTyping ?
+          firestore().collection("users").doc(auth().currentUser.uid).update({
+            userStatus:{
+              isTyping: true,
+              online_status : true,
+              timestamp : firestore.FieldValue.serverTimestamp()
+            }
+          })  :
+          firestore().collection("users").doc(auth().currentUser.uid).update({
+            userStatus:{
+              isTyping: false,
+              online_status : true,
+              timestamp : firestore.FieldValue.serverTimestamp()
+            }
+          })
   }
 
   sendMessage = (message) => {
@@ -51,6 +74,8 @@ export default class PrivateChat extends Component {
 
       var docRef1 = firestore().collection("messages").doc(thread_refrence1);
       var docRef2 = firestore().collection("messages").doc(thread_refrence2);
+      var sender = firestore().collection("users").doc(sender_user_id);
+      var reciever = firestore().collection("users").doc(reciever_user_id);
 
 
       docRef1.get().then(function(doc) {
@@ -59,23 +84,73 @@ export default class PrivateChat extends Component {
               docRef1.update({
                 msg: firestore.FieldValue.arrayUnion(messageObject)
               });
-          } else {
+
+              sender.update({
+                  lastChatMessage:{
+                    id:1,
+                    lastMessage:message,
+                    lastMessageTime: date,
+                  }
+              });
+              reciever.update({
+                lastChatMessage:{
+                  id:1,
+                  lastMessage:message,
+                  lastMessageTime: date,
+                }
+            });
+
+          } 
+          else {
               
                 docRef2.get().then(function(doc) {
-                  if (doc.exists) {
-                      console.log("Already");
-                      docRef2.update({
-                        msg: firestore.FieldValue.arrayUnion(messageObject)
-                      });
-                  } else {
-                    console.log("No such document!");
-                      docRef2.set({
-                          msg: [
-                              messageObject
-                            ]
-                    });
-                  }
-                });
+                    if (doc.exists) {
+                        console.log("Already");
+                        docRef2.update({
+                          msg: firestore.FieldValue.arrayUnion(messageObject)
+                        });
+
+                        sender.update({
+                          lastChatMessage:{
+                            id:1,
+                            lastMessage:message,
+                            lastMessageTime: date,
+                          }
+                        });
+                        reciever.update({
+                          lastChatMessage:{
+                            id:1,
+                            lastMessage:message,
+                            lastMessageTime: date,
+                          }
+                        });
+
+                    } 
+                    else 
+                      {
+                        console.log("No such document!");
+                          docRef2.set({
+                              msg: [
+                                  messageObject
+                                ]
+                        });
+
+                        sender.update({
+                          lastChatMessage:{
+                            id:1,
+                            lastMessage:message,
+                            lastMessageTime: date,
+                          }
+                        });
+                        reciever.update({
+                          lastChatMessage:{
+                            id:1,
+                            lastMessage:message,
+                            lastMessageTime: date,
+                          }
+                        });
+                      }
+                  });
           }
           }).catch(function(error) {
             console.log("Error getting document:", error);
@@ -103,7 +178,7 @@ export default class PrivateChat extends Component {
     var docRef2 = firestore().collection("messages").doc(thread_refrence2);
 
 
-  unSubscribe = docRef1.get().then(function(doc) {
+  this.unSubscribe = docRef1.get().then(function(doc) {
         if (doc.exists) {
             console.log("Already");
             docRef1.onSnapshot((doc) => {
@@ -148,9 +223,12 @@ export default class PrivateChat extends Component {
    await this.getAllMessages();
   }
 
-  // componentWillUnmount(){
-  //   unSubscribe();
-  // }
+  componentWillUnmount(){
+    if(this.unsubscribe)
+    {
+      this.unsubscribe();
+    }
+  }
 
   render() {
 
@@ -159,6 +237,8 @@ export default class PrivateChat extends Component {
         <ChatHeader
            title={this.state.reciever_user.full_name} 
            online={this.state.online}
+           onPress={this.onBackPressEvent}
+           isTyping={this.state.isTyping}
         />
 
             <View style={styles.contentContainer}>   
@@ -185,7 +265,7 @@ export default class PrivateChat extends Component {
                       }}
                     />
 
-                : <ActivityIndicator size={50} />
+                : <Text style={{justifyContent: 'center'}}>No Messages</Text> //<ActivityIndicator size={50} />
 
             }    
                 
@@ -195,6 +275,7 @@ export default class PrivateChat extends Component {
 
         <MessageSender 
             sendMessage={this.sendMessage}
+            //updateTypingStatus={this.updateTypingStatus}
         />
          
       </View>

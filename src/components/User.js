@@ -1,16 +1,33 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet,StatusBar, SafeAreaView, Image } from 'react-native';
 import colors from '../style/colors';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import moment from 'moment';
 
 export default class User extends Component {
   constructor(props) {
+    console.log("LAST_MESSAGE...:",props)
     super(props);
     this.state = {
+        lastMessage: "",
+        time: ""
+    };
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+      console.log("NEXT_PROPS.....:",nextProps)
+    return {
+      lastMessage: nextProps.lastChatMessage,
+      time: nextProps.time
     };
   }
 
   render() {
+    var that = this;
+    console.log("TIME...:",this.state.time)
     return (
+
 
           <View style={styles.container}>
                 
@@ -22,18 +39,23 @@ export default class User extends Component {
                 </View>
 
                 <View style={styles.titleContainer}>
-                    <Text style={styles.titleStyle}>{this.props.name}</Text>
+                    <View style={{flex: 1,flexDirection: 'row', }}>
+                      <Text style={styles.titleStyle}>{this.props.name}</Text>
+                      <Text style={{flex:1 ,fontSize: 12,color:colors.orange, }}>
+                          { this.state.time ? moment(this.state.time).calendar() : null }
+                      </Text>
+                    </View>
+                    
                     <Text
                         numberOfLines={1} 
                         style={{fontSize: 14,color:colors.grey}}>
-                            But I must explain to you how all this But I must explain to you how all this
+                            {this.state.lastMessage}
                     </Text>
                 </View>
 
-                <View style={styles.timeContainer}>
-                    <Text style={{fontSize:12, color: colors.orange}}>12 Dec</Text>
-                    <Text style={{fontSize: 12,color:colors.orange}}>11.10 PM</Text>
-                </View>
+                {/* <View style={styles.timeContainer}>
+                    <Text style={{fontSize: 12,color:colors.orange}}>{moment(this.state.time).calendar()}</Text>
+                </View> */}
 
         </View>
       
@@ -64,19 +86,20 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'center',
-        borderRightColor: colors.grey,
-        borderRightWidth: 1,
+        // borderRightColor: colors.grey,
+        // borderRightWidth: 1,
         marginLeft: 5
     },
     timeContainer:{
         flex: 2,
         //backgroundColor: 'blue',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         marginLeft: 10
         //marginHorizontal: 10
     },
     titleStyle:{
+        flex: 1,
         fontSize: 14,
         fontWeight: 'bold',
         color: 'black'

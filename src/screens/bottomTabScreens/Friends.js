@@ -10,9 +10,11 @@ import {AppNavigator} from '../../../App';
 
 export default class Friends extends Component {
   constructor(props) {
+    //console.log("MYPROPS....",props);
     super(props);
     this.state = {
-      friends:[]
+      friends:[],
+      messages: [],
     };
   }
 
@@ -36,6 +38,8 @@ export default class Friends extends Component {
                  });
   }
 
+
+
   navigateToPrivateChat = (userData) => {
     //console.log("USERDATA>>>:",userData);
     this.props.screenProps.navigate("privateChat" , {"user":userData});
@@ -48,6 +52,7 @@ export default class Friends extends Component {
         case "online":
 
           var user_status = {
+            //isTyping: false,
             online_status : true,
             timestamp : firestore.FieldValue.serverTimestamp()
           };
@@ -57,6 +62,7 @@ export default class Friends extends Component {
         case "offline":
 
           var user_status = {
+            //isTyping: false,
             online_status : false,
             timestamp : firestore.FieldValue.serverTimestamp()
           };
@@ -67,7 +73,7 @@ export default class Friends extends Component {
 }
 
   handleAppStateChange = (nextAppState) => {
-    //console.log("LOGGGG.... :", nextAppState);
+    console.log("LOGGGG.... :", nextAppState);
     if (nextAppState === 'background') {
         this.updateOnlineStatus('offline')
        
@@ -77,7 +83,8 @@ export default class Friends extends Component {
   }
 }
 
-  async componentDidMount(){
+
+ componentDidMount(){
 
     this.getFriends();
 
@@ -91,7 +98,12 @@ export default class Friends extends Component {
  
   }
 
+  componentWillUnmount() {
+    AppState.removeEventListener('change', () => this.handleAppStateChange());
+  }
+
   render() {
+    console.log("FRIENDSSSSSS....:",this.state.friends)
     return (
       <View style={styles.container}>
           <FlatList 
@@ -99,10 +111,14 @@ export default class Friends extends Component {
             keyExtractor={(item) => item.id}
             renderItem = {({item}) => {
               const user = item._data;
+              console.log("LAST...", item._data.lastChatMessage);
               return(
                   <TouchableOpacity onPress={() => this.navigateToPrivateChat(item._data)}>
                     <User
                       name={user.full_name}
+                      id={item._data.id}
+                      lastChatMessage={item._data.lastChatMessage.lastMessage}
+                      time={item._data.lastChatMessage.lastMessageTime}
                     />
                   </TouchableOpacity>
               );

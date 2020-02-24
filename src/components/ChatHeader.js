@@ -15,7 +15,8 @@ class ChatHeader extends Component {
     this.state = {
         iconName:"search",
         isSearching:false,
-        search_query: ""
+        search_query: "",
+        isTyping: false
     };
   }
 
@@ -23,7 +24,8 @@ class ChatHeader extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     return {
-        isSearching: nextProps.isSearching
+        isSearching: nextProps.isSearching,
+        isTyping: nextProps.isTyping
     };
   }
 
@@ -57,18 +59,20 @@ class ChatHeader extends Component {
 
                     :   <View style={styles.sectionContainer}>
 
-                            <View style={styles.logoContainer}>
+                            <TouchableOpacity onPress={this.props.onPress} style={styles.logoContainer}>
                                 <BackIcon
                                     name="left"
                                     size={25}
-                                    onPress={this.onBackPress}
+                                    //onPress={this.onBackPress}
                                />
-                            </View>
+                            </TouchableOpacity>
 
                             <View style={styles.titleContainer}>
                                 <Text style={styles.titleStyle}>{this.props.title}</Text>
                                 {
                                     this.props.online ?
+                                        this.state.isTyping ? 
+                                        <Text style={styles.latSeenStyle}> Typing... </Text> :
                                         <Text style={styles.latSeenStyle}> online </Text>
                                     :
                                         <Text style={styles.latSeenStyle}> last seen at 9:30 PM </Text>
@@ -79,7 +83,7 @@ class ChatHeader extends Component {
                 }
 
                 <View style={styles.avatarContainer}>
-                    <TouchableOpacity onPress={()=>this.onIconClick()}>
+                    {/* <TouchableOpacity>
                         {
                             !this.state.isSearching ? 
                                 <SearchIcon 
@@ -93,10 +97,10 @@ class ChatHeader extends Component {
                                     color={colors.lightGrey}
                                 />
                         }
-                    </TouchableOpacity>    
+                    </TouchableOpacity>     */}
                     <Image 
                         source={require('../assets/icons/team-member-13.png')}
-                        style={{height: 35, width: 35}}
+                        style={{height: 35, width: 35,}}
                     />
                 </View>
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet,Button } from 'react-native';
+import { View, Text, StyleSheet,Button, AppState } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {user_signout} from '../../Redux/actions/auth_actions';
@@ -29,6 +29,8 @@ class Settings extends Component {
       this.props.dispatchReset();
     });
       }
+
+  
     
     render() {
         return (
